@@ -1,7 +1,7 @@
 
 
 <h4 align="center">
-  🚀 Aplicação desenvolvida em ReactNative para busca de vagas
+  &#128241; Aplicação desenvolvida em ReactNative para busca de vagas
 </h4>
 
 
