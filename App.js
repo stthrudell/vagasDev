@@ -17,7 +17,7 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator 
-        initialRouteName="Repositories"
+        initialRouteName="Splash"
         screenOptions={{
           headerShown: false
         }}

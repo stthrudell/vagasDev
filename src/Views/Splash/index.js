@@ -6,7 +6,7 @@ import LottieView from 'lottie-react-native';
 
 export default function Splash({ navigation }) {
     return (
-        <View style={{flex: 1, backgroundColor: '#cecece', justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{flex: 1, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center'}}>
             <LottieView 
                 source={require('../../../assets/splash.json')} 
                 autoPlay 

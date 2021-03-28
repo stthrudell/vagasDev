@@ -8,6 +8,7 @@ import api from '../../Services/api'
 
 import * as S from './styles'
 import Modal from '../../Components/Modal';
+import Labels from '../../Components/Labels';
 
 const repoDefault = {
     "id": 51001484,
@@ -2766,21 +2767,37 @@ export default function Vacancies({ route, navigation }) {
     const [modalTitle, setModalTitle] = React.useState('')
     const [modalContent, setModalContent] = React.useState('')
     const [actionModal, setActionModal] = React.useState('')
+    const [showLabels, setShowLabels] = React.useState(false)
 
     const { repoId } = route.params;
 
     React.useEffect(() => {
-        // api.get(`repos/${repoId}/vagas`).then((response) => {
-        //     setRepository(response.data)
-        // });
+        api.get(`repos/${repoId}/vagas`).then((response) => {
+            setRepository(response.data)
+        });
 
-        // api.get(`repos/${repoId}/vagas/issues`).then((response) => {
-        //     setVacancies(response.data)
-        // });
+        api.get(`repos/${repoId}/vagas/issues`).then((response) => {
+            setVacancies(response.data)
+        });
     }, [])
 
     return (
         <S.Container>
+            <S.IconLabel style={{
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 7,
+              },
+              shadowOpacity: 0.43,
+              shadowRadius: 9.51,
+              
+              elevation: 15,
+            }}
+              onPress={() => setShowLabels(!showLabels)}
+            >
+                {showLabels ? <Icon name="eye-slash" size={28} color="#999"/> : <Icon name="eye" size={28} color="#999"/>}
+            </S.IconLabel>
             <S.Repo statusBarHeight={StatusBarReact.currentHeight}>
                 <S.Image 
                     source={{
@@ -2795,28 +2812,32 @@ export default function Vacancies({ route, navigation }) {
             <ScrollView contentContainerStyle = {{alignItems: 'center', padding: 30}} >
                 <S.CountVagas>{`${vacanncies.length} vagas abertas 😀`}</S.CountVagas>
                 {vacanncies.map(vaga => (
-                    <S.Vacancie key={vaga.id} 
-                        //onPress={() => Linking.openURL(vaga.html_url)}
-                        onPress={() => {
-                            setModalTitle(vaga.title)
-                            setModalContent(vaga.body)
-                            setActionModal(vaga.html_url)
-                            setModalVisible(true)
-                        }}
-                    >
-                        <S.Image 
-                            source={{
-                                uri: vaga.user.avatar_url,
-                            }}
-                        />
-                        <S.Content>
-                            <Text>{vaga.title}</Text>
-                            <S.Description>{vaga.user.login}</S.Description>
-                        </S.Content>
-                        <S.Icon>
-                            <Icon name="angle-right" size={18} color="#999"/>
-                        </S.Icon>
-                    </S.Vacancie>
+                    <React.Fragment key={vaga.id} >
+                      <S.Vacancie 
+                          //onPress={() => Linking.openURL(vaga.html_url)}
+                          onPress={() => {
+                              setModalTitle(vaga.title)
+                              setModalContent(vaga.body)
+                              setActionModal(vaga.html_url)
+                              setModalVisible(true)
+                          }}
+                      >
+                          <S.Image 
+                              source={{
+                                  uri: vaga.user.avatar_url,
+                              }}
+                          />
+                          <S.Content>
+                              <Text>{vaga.title}</Text>
+                              <S.Description>{vaga.user.login}</S.Description>
+                          </S.Content>
+                          <S.Icon>
+                              <Icon name="angle-right" size={18} color="#999"/>
+                          </S.Icon>
+                      </S.Vacancie>
+                      <Labels labels={vaga.labels} showLabels={showLabels}/>
+                    </React.Fragment>
+
                 ))}
             </ScrollView>
             <Modal modalVisible={modalVisible} setModalVisible={setModalVisible}>

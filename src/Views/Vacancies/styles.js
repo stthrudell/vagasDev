@@ -22,12 +22,13 @@ export const Vacancie = styled.TouchableOpacity `
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    z-index: 2;
 `
 
 export const Image = styled.Image`
     width: 50px;
     height: 50px;
-    border-radius: 3px;
+    border-radius: 100px;
     margin-right: 10px;
 `
 
@@ -60,4 +61,17 @@ export const VagaDescription = styled.Text`
 
 export const CountVagas = styled.Text`
     font-size: 22px;
+`
+
+export const IconLabel = styled.TouchableOpacity`
+    background: #fff;
+    width: 50px;
+    height: 50px;
+    border-radius: 100px;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    z-index: 2;
 `
