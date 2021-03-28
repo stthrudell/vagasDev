@@ -1,6 +1,6 @@
 import React from 'react'
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, Linking } from 'react-native'
+import { View, Linking } from 'react-native'
 
 
 import LottieView from 'lottie-react-native';
