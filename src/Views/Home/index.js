@@ -18,7 +18,7 @@ export default function Home({navigation}) {
     }
 
     function openLinkProject() {
-        Linking.openURL('https://google.com');
+        Linking.openURL('https://github.com/stthrudell/vagasDev');
     }
 
     return (
@@ -34,7 +34,7 @@ export default function Home({navigation}) {
                 }}
                 style={{marginTop: 150}}
             />
-            <S.Title>Olha dev! &#128075;</S.Title>
+            <S.Title>Olá dev! &#128075;</S.Title>
             <S.Text>Este app foi desenvolvido com o intuito de te ajudar a achar uma vaga como desenvolvedor.</S.Text>
             <S.Text >Este projeto é opensource e você pode contribuir <S.Span onPress={openLinkProject}>clicando aqui</S.Span></S.Text>
             <S.Text>Good luck and let's code!</S.Text>
