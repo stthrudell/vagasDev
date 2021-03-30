@@ -1,6 +1,6 @@
 import React from 'react'
 import { StatusBar } from 'expo-status-bar';
-import { View, Linking } from 'react-native'
+import { View, Linking, Image } from 'react-native'
 
 
 import LottieView from 'lottie-react-native';
@@ -33,6 +33,9 @@ export default function Home({navigation}) {
                     navigation.navigate('Repositories')
                 }}
                 style={{marginTop: 150}}
+            />
+            <Image
+                source={require('../../../assets/logo.jpg')}
             />
             <S.Title>Olá dev! &#128075;</S.Title>
             <S.Text>Este app foi desenvolvido com o intuito de te ajudar a achar uma vaga como desenvolvedor.</S.Text>
