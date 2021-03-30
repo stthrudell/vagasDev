@@ -1,6 +1,8 @@
 import React from 'react'
 import { StatusBar } from 'expo-status-bar';
-import { Text, ScrollView, StatusBar as StatusBarReact, Linking, Button } from 'react-native'
+import { Text, ScrollView, StatusBar as StatusBarReact, Linking, Button, View } from 'react-native'
+
+import Markdown from 'react-native-markdown-display';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -9,6 +11,7 @@ import api from '../../Services/api'
 import * as S from './styles'
 import Modal from '../../Components/Modal';
 import Labels from '../../Components/Labels';
+
 
 const repoDefault = {
     "id": 51001484,
@@ -2842,7 +2845,11 @@ export default function Vacancies({ route, navigation }) {
             </ScrollView>
             <Modal modalVisible={modalVisible} setModalVisible={setModalVisible}>
                 <S.VagaTitle>{modalTitle}</S.VagaTitle>
-                <S.VagaDescription>{modalContent}</S.VagaDescription>
+                <ScrollView contentInsetAdjustmentBehavior="automatic">
+                <Markdown>
+                    {modalContent}
+                  </Markdown>
+                </ScrollView>
                 <Button
                     title="Abrir no github"
                     onPress={() => {
