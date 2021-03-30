@@ -32,7 +32,7 @@ export default function Home({navigation}) {
                 onAnimationFinish={() => {
                     navigation.navigate('Repositories')
                 }}
-                style={{marginTop: 150}}
+                style={{marginTop: 250}}
             />
             <Image
                 source={require('../../../assets/logo.jpg')}
