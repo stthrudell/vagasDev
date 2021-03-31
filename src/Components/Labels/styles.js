@@ -4,6 +4,7 @@ export const Labels = styled.View`
     border: 1px solid #e0e0e0;
     position: relative;
     top: -15px;
+    right: -${props => props.deviceWidth ? props.deviceWidth / 10 : 40}px;
     padding: 5px;
     padding-top: 10px;
     z-index: 0;

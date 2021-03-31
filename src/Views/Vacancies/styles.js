@@ -61,6 +61,8 @@ export const VagaDescription = styled.Text`
 
 export const CountVagas = styled.Text`
     font-size: 22px;
+    text-align: center;
+    padding-bottom: 10px;
 `
 
 export const IconLabel = styled.TouchableOpacity`

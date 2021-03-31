@@ -1,6 +1,6 @@
 import React from 'react'
 import { StatusBar } from 'expo-status-bar';
-import { Text, ScrollView, StatusBar as StatusBarReact, Linking, Button, View } from 'react-native'
+import { Text, ScrollView, StatusBar as StatusBarReact, Linking, Button, View, FlatList } from 'react-native'
 
 import Markdown from 'react-native-markdown-display';
 
@@ -51,6 +51,34 @@ export default function Vacancies({ route, navigation }) {
 
     const { repoId } = route.params;
 
+    const renderItem = ({item}) => (
+      <>
+        <S.Vacancie 
+          //onPress={() => Linking.openURL(vaga.html_url)}
+          onPress={() => {
+              setModalTitle(item.title)
+              setModalContent(item.body)
+              setActionModal(item.html_url)
+              setModalVisible(true)
+          }}
+        >
+          <S.Image 
+              source={{
+                  uri: item.user.avatar_url,
+              }}
+          />
+          <S.Content>
+              <Text>{item.title}</Text>
+              <S.Description>{item.user.login}</S.Description>
+          </S.Content>
+          <S.Icon>
+              <Icon name="angle-right" size={18} color="#999"/>
+          </S.Icon>
+        </S.Vacancie>
+        <Labels labels={item.labels} showLabels={showLabels}/>
+      </>
+    )
+
     React.useEffect(() => {
         api.get(`repos/${repoId}/vagas`).then((response) => {
             setRepository(response.data)
@@ -89,37 +117,14 @@ export default function Vacancies({ route, navigation }) {
                     <S.Description>{repository.description}</S.Description>
                 </S.Content>
             </S.Repo>
-            <ScrollView contentContainerStyle = {{alignItems: 'center', padding: 30}} >
-                <S.CountVagas>{`${vacanncies.length} vagas abertas 😀`}</S.CountVagas>
-                {vacanncies.map(vaga => (
-                    <React.Fragment key={vaga.id} >
-                      <S.Vacancie 
-                          //onPress={() => Linking.openURL(vaga.html_url)}
-                          onPress={() => {
-                              setModalTitle(vaga.title)
-                              setModalContent(vaga.body)
-                              setActionModal(vaga.html_url)
-                              setModalVisible(true)
-                          }}
-                      >
-                          <S.Image 
-                              source={{
-                                  uri: vaga.user.avatar_url,
-                              }}
-                          />
-                          <S.Content>
-                              <Text>{vaga.title}</Text>
-                              <S.Description>{vaga.user.login}</S.Description>
-                          </S.Content>
-                          <S.Icon>
-                              <Icon name="angle-right" size={18} color="#999"/>
-                          </S.Icon>
-                      </S.Vacancie>
-                      <Labels labels={vaga.labels} showLabels={showLabels}/>
-                    </React.Fragment>
-
-                ))}
-            </ScrollView>
+            <S.CountVagas>{`${repository.open_issues_count} vagas abertas 😀`}</S.CountVagas>
+            <FlatList
+              contentContainerStyle={{padding: 30, alignItems: 'center' }}
+              //contentContainerStyle={styles.list}
+              data={vacanncies}
+              renderItem={renderItem}
+              keyExtractor={item => item.id}
+            />
             <Modal modalVisible={modalVisible} setModalVisible={setModalVisible}>
                 <S.VagaTitle>{modalTitle}</S.VagaTitle>
                 <ScrollView contentInsetAdjustmentBehavior="automatic">
