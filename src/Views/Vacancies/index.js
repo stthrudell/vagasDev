@@ -1,6 +1,6 @@
 import React from 'react'
 import { StatusBar } from 'expo-status-bar';
-import { Text, ScrollView, StatusBar as StatusBarReact, Linking, Button, View, FlatList } from 'react-native'
+import { Text, ScrollView, StatusBar as StatusBarReact, Linking, Button, View, FlatList, ActivityIndicator } from 'react-native'
 
 import Markdown from 'react-native-markdown-display';
 
@@ -11,6 +11,7 @@ import api from '../../Services/api'
 import * as S from './styles'
 import Modal from '../../Components/Modal';
 import Labels from '../../Components/Labels';
+import VacancieCard from '../../Components/VacancieCard';
 
 
 const repoDefault = {
@@ -27,7 +28,7 @@ const repoDefault = {
 const vagas = [
     {
       "html_url": "https://github.com/frontendbr/vagas/issues/4555",
-      "id": 842522809,
+      "id": -1,
       "number": 4555,
       "title": "Carregando vagas...",
       "user": {
@@ -41,6 +42,9 @@ const vagas = [
   ]
 
 export default function Vacancies({ route, navigation }) {
+    const [loading, setLoading] = React.useState(false);
+    const [page, setPage] = React.useState(1);
+    const [noMore, setNoMore] = React.useState(false);
     const [repository, setRepository] = React.useState(repoDefault)
     const [vacanncies, setVacancies] = React.useState(vagas);
     const [modalVisible, setModalVisible] = React.useState(false)
@@ -52,7 +56,7 @@ export default function Vacancies({ route, navigation }) {
     const { repoId } = route.params;
 
     const renderItem = ({item}) => (
-      <>
+      <React.Fragment key={item.id}>
         <S.Vacancie 
           //onPress={() => Linking.openURL(vaga.html_url)}
           onPress={() => {
@@ -76,17 +80,42 @@ export default function Vacancies({ route, navigation }) {
           </S.Icon>
         </S.Vacancie>
         <Labels labels={item.labels} showLabels={showLabels}/>
-      </>
+      </React.Fragment>
     )
+
+    function loadVacancie() {
+      if (loading || noMore) return;
+
+      setLoading(true);
+
+      api.get(`repos/${repoId}/vagas/issues?page=${page}&per_page=30`).then((response) => {
+        if(response.data.length === 0) {
+          setNoMore(true)
+          setLoading(false);
+          return
+        }
+        const newVacancies = vacanncies[0].id === -1 ? [] : [...vacanncies];
+        setVacancies([...newVacancies , ...response.data])
+        setPage(page + 1);
+        setLoading(false);
+      });
+    }
+
+    const renderFooter = () => {
+      if (!loading) return null;
+      return (
+        <View style={{margin: 20}}>
+          <ActivityIndicator size="large" color="#3498db" />
+        </View>
+      );
+    };
 
     React.useEffect(() => {
         api.get(`repos/${repoId}/vagas`).then((response) => {
             setRepository(response.data)
         });
 
-        api.get(`repos/${repoId}/vagas/issues`).then((response) => {
-            setVacancies(response.data)
-        });
+        loadVacancie();
     }, [])
 
     return (
@@ -120,10 +149,21 @@ export default function Vacancies({ route, navigation }) {
             <S.CountVagas>{`${repository.open_issues_count} vagas abertas 😀`}</S.CountVagas>
             <FlatList
               contentContainerStyle={{padding: 30, alignItems: 'center' }}
-              //contentContainerStyle={styles.list}
+              onEndReached={loadVacancie}
+              onEndReachedThreshold={0.1}
               data={vacanncies}
               renderItem={renderItem}
-              keyExtractor={item => item.id}
+              // renderItem={({item}) => (
+              //   <VacancieCard 
+              //     item={item} 
+              //     setModalTitle={setModalTitle} 
+              //     setModalContent={setModalContent} 
+              //     setActionModal={setActionModal} 
+              //     setModalVisible={setModalVisible} 
+              //     showLabels={showLabels}
+              //   />
+              // )}
+              ListFooterComponent={renderFooter}
             />
             <Modal modalVisible={modalVisible} setModalVisible={setModalVisible}>
                 <S.VagaTitle>{modalTitle}</S.VagaTitle>
