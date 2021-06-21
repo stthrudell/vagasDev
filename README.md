@@ -13,6 +13,10 @@
 
 <br>
 
+## :iphone: PlayStore
+
+[Baixe o app para android](https://play.google.com/store/apps/details?id=com.aut.vagasdev)
+
 ## :rocket: Tecnologias
 
 Esse projeto foi desenvolvido com as seguintes tecnologias:
